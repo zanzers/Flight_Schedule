@@ -23,7 +23,7 @@
     ```bash
     pip install pytest
     ```
-5. Install Pytest for testing:
+5. Install Flask-JWT-Extended for authentication :
     ```bash
     pip install Flask-JWT-Extended
     ```
