@@ -23,6 +23,11 @@
     ```bash
     pip install pytest
     ```
+5. Install Pytest for testing:
+    ```bash
+    pip install Flask-JWT-Extended
+    ```
+
 
 ## Configuration
 
