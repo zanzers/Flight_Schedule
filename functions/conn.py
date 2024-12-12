@@ -11,16 +11,20 @@ config = {
 }
 
 
-def db_read(query, params=None):
+def db_read(query, param=None):
       
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor(dictionary=True)
 
     try:    
         
-        if params != None:
-           cursor.execute(query, params)
+        if param != None:
+           cursor.execute(query, param)
            conn.commit()
+
+           if query.strip().startswith("DELETE"):
+              return cursor.rowcount
+
 
            cursor.close()
            conn.close()
