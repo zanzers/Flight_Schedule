@@ -20,16 +20,12 @@ def db_read(query, param=None):
         
         if param != None:
            cursor.execute(query, param)
-           conn.commit()
-
-           if query.strip().startswith("DELETE"):
-              return cursor.rowcount
-
+           conn.commit()    
 
            cursor.close()
            conn.close()
            
-           return HTTPStatus.OK
+           return  HTTPStatus.OK
            
         else:
             
@@ -45,3 +41,27 @@ def db_read(query, param=None):
         print(f"Error: {e}")
         return HTTPStatus.INTERNAL_SERVER_ERROR
     
+
+def get_db(query, param=None):
+      
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor(dictionary=True)
+
+    try:    
+        
+           cursor.execute(query, param)
+           entries = cursor.fetchall()
+           conn.commit()    
+
+           cursor.close()
+           conn.close()
+           
+           return entries
+           
+    
+
+    except Error as e:
+        print(f"Error: {e}")
+        return HTTPStatus.INTERNAL_SERVER_ERROR
+    
+
