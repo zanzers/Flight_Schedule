@@ -20,8 +20,12 @@ def db_read(query, param=None):
         
         if param != None:
            cursor.execute(query, param)
-           conn.commit()    
+           conn.commit() 
 
+
+           if query.strip().startswith("DELETE"):
+                return cursor.rowcount
+           
            cursor.close()
            conn.close()
            

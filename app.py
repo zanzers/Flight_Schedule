@@ -1,10 +1,24 @@
+
 from flask import Flask, jsonify, request
 from functions.conn import db_read,get_db
 from http import HTTPStatus
+from flask_jwt_extended import create_access_token, jwt_required
 
+import functions.auth
 
 app = Flask(__name__)
 
+
+app.config['JWT_SECRET_KEY'] = 'Nowell'
+functions.auth.initialition_jwt(app)
+
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    identity = "admin"
+    role =  "admin"
+    access_token = create_access_token(identity=identity, additional_claims={"role": role})
+    return jsonify(access_token=access_token)
 
 
 
@@ -22,7 +36,7 @@ def flight_schedule(flight_no=None):
             flights = db_read(query, param=None)
 
             processed_flights = [{
-                "Flight_No": flight["flight_schedule_ID"], 
+                "flight_no": flight["flight_schedule_ID"], 
                 "airline_code": flight["airline_code"],
                 "arrival_date_time": flight["arraval_date_time"],
                 "departure_date_time": flight["departure_date_time"],
@@ -49,14 +63,14 @@ def flight_schedule(flight_no=None):
 
             if not flights:
                 return jsonify({
-                    "error": f"Flight with Flight_No {flight_no} not found."
+                    "error": f"Flight with flight_no {flight_no} not found."
                 }), HTTPStatus.NOT_FOUND
      
             
 
             return jsonify({
                 "Flight Details": {
-                    "Flight_No": flights[0]["flight_schedule_ID"],
+                    "flight_no": flights[0]["flight_schedule_ID"],
                     "airline_code": flights[0]["airline_code"],
                     "arrival_date_time": flights[0]["arraval_date_time"],
                     "departure_date_time": flights[0]["departure_date_time"],
@@ -73,6 +87,9 @@ def flight_schedule(flight_no=None):
 @app.route('/api/flight_schedules', methods=['POST'])
 def create_flight_schedule():
    try:
+            validation_response = functions.auth.validation()
+            if validation_response:
+                return validation_response
 
 
             data = request.get_json() 
@@ -117,10 +134,14 @@ def create_flight_schedule():
             }), HTTPStatus.BAD_REQUEST
       
 
-@app.route('/api/flight_schedules/<int:Flight_No>', methods=['PUT'])
-def update_flight_schedule(Flight_No):
+@app.route('/api/flight_schedules/<int:flight_no>', methods=['PUT'])
+def update_flight_schedule(flight_no):
     
 
+
+    validation_response = functions.auth.validation()
+    if validation_response:
+        return validation_response
     
     try:
         data = request.get_json()
@@ -150,13 +171,13 @@ def update_flight_schedule(Flight_No):
             data.get("final_airport_code"),
             data.get("departure_date_time"),
             data.get("arraval_date_time"),
-            Flight_No  
+            flight_no
         )
 
         result = db_read(query, values)
 
         if result == HTTPStatus.OK:
-            return jsonify({"message": f"Flight schedule with No {Flight_No} updated successfully"}), HTTPStatus.OK
+            return jsonify({"message": f"Flight schedule with flight No: {flight_no} updated successfully"}), HTTPStatus.OK
         else:
             return jsonify({"error": "Failed to update flight schedule"
                             }), HTTPStatus.INTERNAL_SERVER_ERROR
@@ -167,28 +188,31 @@ def update_flight_schedule(Flight_No):
             }), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
-@app.route('/api/flight_schedules/<int:Flight_No>', methods=['DELETE'])
-def delete_flight_schedule(Flight_No):
+@app.route('/api/flight_schedules/<int:flight_no>', methods=['DELETE'])
+def delete_flight_schedule(flight_no):
     
+    validation_response = functions.auth.validation()
+    if validation_response:
+        return validation_response
 
     try:
     
         query = "DELETE FROM flight_schedule WHERE flight_schedule_ID = %s"
         
-        if Flight_No == '':
+        if flight_no == '':
             return no_data()
      
         
-        result = db_read(query, (Flight_No,))
+        result = db_read(query, (flight_no,))
 
         if result == 0:
             return jsonify({
-                "error": f"Flight schedule with No {Flight_No} not found"
+                "error": f"Flight schedule with flight No: {flight_no} not found"
             }), HTTPStatus.NOT_FOUND
         
       
         return jsonify({
-            "message": f"Flight schedule with No {Flight_No} deleted successfully"
+            "message": f"Flight schedule with flight No: {flight_no} deleted successfully"
         }), HTTPStatus.OK
 
     except Exception as e:
