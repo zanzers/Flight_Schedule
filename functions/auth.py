@@ -1,4 +1,4 @@
-from flask_jwt_extended import JWTManager, create_access_token,get_jwt,verify_jwt_in_request
+from flask_jwt_extended import JWTManager,create_access_token, get_jwt,verify_jwt_in_request
 from flask import jsonify, request
 import datetime
 from http import HTTPStatus

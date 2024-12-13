@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from functions.conn import db_read,get_db
 from http import HTTPStatus
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import  create_access_token, jwt_required
 
 import functions.auth
 
@@ -47,7 +47,7 @@ def flight_schedule(flight_no=None):
             return jsonify({
                 "Airlines Flight Schedules": processed_flights,
                 "total_flights": len(processed_flights)
-            })
+            }), HTTPStatus.OK
 
         else:
             
@@ -77,7 +77,7 @@ def flight_schedule(flight_no=None):
                     "final_airport_code": flights[0]["final_airport_code"],
                     "first_airport_code": flights[0]["first_airport_code"],
                 }
-            })
+            }), HTTPStatus.OK
         
     except Exception as e:
         return jsonify({
@@ -120,13 +120,6 @@ def create_flight_schedule():
                 return jsonify({
                     "message": "Flight schedule created successfully"
                 }), HTTPStatus.CREATED
-            else:
-                return jsonify({
-                    "error": "Failed to create flight schedule" 
-                }), HTTPStatus.INTERNAL_SERVER_ERROR
-
-           
-            
 
    except Exception as e:
         return jsonify({
@@ -179,8 +172,7 @@ def update_flight_schedule(flight_no):
         if result == HTTPStatus.OK:
             return jsonify({"message": f"Flight schedule with flight No: {flight_no} updated successfully"}), HTTPStatus.OK
         else:
-            return jsonify({"error": "Failed to update flight schedule"
-                            }), HTTPStatus.INTERNAL_SERVER_ERROR
+            return failed_process()
 
     except Exception as e:
         return jsonify({
@@ -229,6 +221,12 @@ def no_data():
         }), HTTPStatus.BAD_REQUEST
 
 
+def failed_process():
+    return jsonify({"error": "Failed to Procees the request"
+                }), HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # pragma: no cover

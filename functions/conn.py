@@ -68,4 +68,3 @@ def get_db(query, param=None):
         print(f"Error: {e}")
         return HTTPStatus.INTERNAL_SERVER_ERROR
     
-
