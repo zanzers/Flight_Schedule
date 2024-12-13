@@ -86,40 +86,43 @@ def flight_schedule(flight_no=None):
 
 @app.route('/api/flight_schedules', methods=['POST'])
 def create_flight_schedule():
+   
    try:
-            validation_response = functions.auth.validation()
-            if validation_response:
-                return validation_response
+        
+        validation_response = functions.auth.validation()
+        if validation_response:
+            return validation_response
+
+        data = request.get_json() 
+
+        input_check_input = check_input(data)
+        if input_check_input:
+            return input_check_input
 
 
-            data = request.get_json() 
-
-            if not data:
-                return no_data()
-
-            query = (
-                    "INSERT INTO flight_schedule "
-                    "(ref_Aircraft_Types_ID, ref_airlines_ID, airline_code, "
-                    "first_airport_code, final_airport_code, departure_date_time, "
-                    "arraval_date_time) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        query = (
+                "INSERT INTO flight_schedule "
+                 "(ref_Aircraft_Types_ID, ref_airlines_ID, airline_code, "
+                 "first_airport_code, final_airport_code, departure_date_time, "
+                 "arraval_date_time) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s)"
                 )
-            values = (
-                    data["ref_Aircraft_Types_ID"],
-                    data["ref_airlines_ID"],
-                    data["airline_code"],
-                    data["first_airport_code"],
-                    data["final_airport_code"],
-                    data["departure_date_time"],
-                    data["arraval_date_time"],
+        values = (
+                data["ref_Aircraft_Types_ID"],
+                data["ref_airlines_ID"],
+                 data["airline_code"],
+                 data["first_airport_code"],
+                 data["final_airport_code"],
+                 data["departure_date_time"],
+                 data["arraval_date_time"],
                 )
             
-            create_flights = db_read(query, values)
+        create_flights = db_read(query, values)
 
-            if create_flights == HTTPStatus.OK:
-                return jsonify({
-                    "message": "Flight schedule created successfully"
-                }), HTTPStatus.CREATED
+        if create_flights == HTTPStatus.OK:
+            return jsonify({
+                 "message": "Flight schedule created successfully"
+             }), HTTPStatus.CREATED
 
    except Exception as e:
         return jsonify({
@@ -139,9 +142,9 @@ def update_flight_schedule(flight_no):
     try:
         data = request.get_json()
 
-        if not data:
-            return no_data()
-
+        input_check_input = check_input(data)
+        if input_check_input:
+            return input_check_input
 
         query = """
             UPDATE flight_schedule
@@ -155,7 +158,8 @@ def update_flight_schedule(flight_no):
                 arraval_date_time = %s
             WHERE flight_schedule_ID = %s
         """
-        
+
+
         values = (
             data.get("ref_Aircraft_Types_ID"),
             data.get("ref_airlines_ID"),
@@ -167,13 +171,14 @@ def update_flight_schedule(flight_no):
             flight_no
         )
 
-        result = db_read(query, values)
 
-        if result == HTTPStatus.OK:
-            return jsonify({"message": f"Flight schedule with flight No: {flight_no} updated successfully"}), HTTPStatus.OK
-        else:
-            return failed_process()
 
+        db_read(query, values)
+        return jsonify({
+
+            "message": f"Flight schedule with flight No: {flight_no} updated successfully"
+            }), HTTPStatus.OK
+     
     except Exception as e:
         return jsonify({
             "error": f"An error occurred: {str(e)}"
@@ -215,17 +220,35 @@ def delete_flight_schedule(flight_no):
 
 
 def no_data():
-
     return jsonify({
         "error": "No data provided"
         }), HTTPStatus.BAD_REQUEST
 
 
 def failed_process():
-    return jsonify({"error": "Failed to Procees the request"
-                }), HTTPStatus.INTERNAL_SERVER_ERROR
+    return jsonify({"error": "Failed to procees the request"
+                }), HTTPStatus.BAD_REQUEST
 
+def check_input(data):
 
+    if not data:
+            
+        return no_data()
+        
+    else:
+
+        required_fields = [
+            "ref_Aircraft_Types_ID", 
+            "ref_airlines_ID", 
+            "airline_code", 
+            "first_airport_code", 
+            "final_airport_code", 
+            "departure_date_time", 
+            "arraval_date_time"
+        ]
+        missing_fields = [field  for field  in required_fields if field  not in data]
+        if missing_fields:
+            return  failed_process()
 
 
 if __name__ == "__main__":

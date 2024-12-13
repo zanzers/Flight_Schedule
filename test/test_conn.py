@@ -130,22 +130,5 @@ class TestDatabaseRead:
         assert result == [] 
 
 
-
-    # @patch('mysql.connector.connect')    
-    # def test_database_read_incase_of_error(self, mock_connect, mock_db):
-       
-    #     mock_connect.side_effect = Error("Database connection failed")
-        
-    #     mock_query = """
-    #         SELECT flight_schedule_ID, airline_code, arraval_date_time, 
-    #                departure_date_time, final_airport_code, first_airport_code 
-    #         FROM flight_schedule
-    #         WHERE flight_schedule = %s
-    #     """
-
-    #     mock_db.setup_mockdb(fetchall_result=[])  
-    #     result = db_read(mock_query, param=None)
-    #     assert result == [HTTPStatus.INTERNAL_SERVER_ERROR]
-
 if __name__ == '__main__':
     pytest.main()

@@ -1,6 +1,6 @@
 import pytest
-from flask import Flask, jsonify
-from unittest.mock import patch, MagicMock
+from flask import jsonify
+from unittest.mock import patch
 from http import HTTPStatus
 from app import app
 

@@ -49,6 +49,23 @@ class MockDb:
                 "departure_date_time": "2024-12-12 16:30",
                 "final_airport_code": "JFK",
                 "first_airport_code": "LAX",
+            },
+            {
+                "flight_schedule_ID": 2,
+                "airline_code": "BB",
+                "arraval_date_time": "2024-12-13 10:30",
+                "departure_date_time": "2024-12-13 11:30",
+                "final_airport_code": "ORD",
+                "first_airport_code": "ATL",
+            },
+            {
+                "ref_Aircraft_Types_ID": 3,
+                "ref_airlines_ID": 1,
+                "airline_code": "AA",
+                "first_airport_code": "LAX",
+                "final_airport_code": "JFK",
+                "departure_date_time": "2024-12-12 15:30",
+                "arraval_date_time": "2024-12-12 16:30"
             }
         ]
     
