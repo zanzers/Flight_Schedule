@@ -2,9 +2,6 @@ from flask_jwt_extended import JWTManager,create_access_token, get_jwt,verify_jw
 from flask import jsonify, request
 import datetime
 from http import HTTPStatus
-
-
-
 jwt = JWTManager()
 
 users = {
@@ -33,8 +30,11 @@ def login():
             "error": "Invalid credentials"
         }), HTTPStatus.UNAUTHORIZED
     
-
-    access_token = create_access_token(identity=username, fresh=True, expires_delta=datetime.timedelta(minutes=5))
+    access_token = create_access_token(
+        identity=username, 
+        fresh=True,
+        additional_claims={"role": users[username] ["role"]}, 
+            expires_delta=datetime.timedelta(minutes=5))
     return jsonify(
         access_token = access_token
     ), HTTPStatus.OK
@@ -43,6 +43,7 @@ def login():
 
 def validation():
     try:
+
         verify_jwt_in_request()
 
         claims = get_jwt()

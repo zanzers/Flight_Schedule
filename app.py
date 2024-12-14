@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from functions.conn import db_read,get_db
 from http import HTTPStatus
-from flask_jwt_extended import  create_access_token, jwt_required
+from functions.auth import login
 
 import functions.auth
 
@@ -14,14 +14,12 @@ functions.auth.initialition_jwt(app)
 
 
 @app.route('/api/auth/login', methods=['POST'])
-def login():
-    identity = "admin"
-    role =  "admin"
-    access_token = create_access_token(identity=identity, additional_claims={"role": role})
-    return jsonify(access_token=access_token)
+def login_route():
+    return login() 
 
 
 
+@app.route('/', methods=['GET'])
 @app.route('/api/flight_schedules', methods=['GET'])
 @app.route('/api/flight_schedules/<int:flight_no>', methods=['GET']) 
 def flight_schedule(flight_no=None):
@@ -45,8 +43,8 @@ def flight_schedule(flight_no=None):
             } for flight in flights]
 
             return jsonify({
+                "total_flights": len(processed_flights),
                 "Airlines Flight Schedules": processed_flights,
-                "total_flights": len(processed_flights)
             }), HTTPStatus.OK
 
         else:
