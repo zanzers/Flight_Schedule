@@ -1,17 +1,20 @@
-
+import os
 from flask import Flask, jsonify, request
 from functions.conn import db_read,get_db
 from http import HTTPStatus
 from functions.auth import login
-
+from dotenv import load_dotenv
 import functions.auth
+from functions.auth import initialition_jwt
 
+
+load_dotenv()
 app = Flask(__name__)
 
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-app.config['JWT_SECRET_KEY'] = 'Nowell'
-functions.auth.initialition_jwt(app)
-
+app.config['JWT_SECRET_KEY'] = SECRET_KEY
+initialition_jwt(app)
 
 @app.route('/api/auth/login', methods=['POST'])
 def login_route():
@@ -44,7 +47,7 @@ def flight_schedule(flight_no=None):
 
             return jsonify({
                 "total_flights": len(processed_flights),
-                "Airlines Flight Schedules": processed_flights,
+                "Airlines Flight Schedules": processed_flights
             }), HTTPStatus.OK
 
         else:
@@ -251,3 +254,11 @@ def check_input(data):
 
 if __name__ == "__main__":
     app.run(debug=True)  # pragma: no cover
+
+
+
+
+
+
+
+

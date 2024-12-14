@@ -1,17 +1,13 @@
 import pytest
+import os
 from unittest.mock import patch, MagicMock
-from functions.conn import db_read, get_db
+from functions.conn import db_read, get_db, DATABASE_URL
 from http import HTTPStatus
 from functions.mockDb import *
 from mysql.connector import Error
 
     
-config = {
-    'user': 'root',  
-    'password': 'root',
-    'host': 'localhost', 
-    'database': 'airlines_schedule'
-}
+
 
 @pytest.fixture
 def mock_db():
@@ -128,6 +124,19 @@ class TestDatabaseRead:
         result = get_db(mock_query, param=invalid_param)
 
         assert result == [] 
+
+
+
+    def test_database_url_conn_with_error(self, monkeypatch):
+         
+         monkeypatch.delenv('DATABASE_URL', raising=False)
+
+         with pytest.raises(ValueError):
+              if not os.getenv('DATABASE_URL'):
+                   raise ValueError("DATABASE_URL environment variable is not set.")
+
+
+
 
 
 if __name__ == '__main__':

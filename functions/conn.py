@@ -1,14 +1,28 @@
+import os
+from dotenv import load_dotenv
+from urllib.parse import urlparse
 import mysql.connector
 from mysql.connector import Error
 from http import HTTPStatus
 
 
-config = {
-    'user': 'root',  
-    'password': 'root',
-    'host': 'localhost', 
-    'database': 'airlines_schedule'
-}
+load_dotenv()
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+config = {}
+
+if DATABASE_URL:
+    db_url = urlparse(DATABASE_URL)
+
+    config = {
+        'user': db_url.username,  
+        'password': db_url.password,
+        'host': db_url.hostname, 
+        'database': db_url.path[1:], 
+    }
+else:
+    raise ValueError("DATABASE_URL environment variable is not set.")
+
 
 
 def db_read(query, param=None):
