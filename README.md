@@ -1,28 +1,3 @@
-
-
-
-{
-    "ref_Aircraft_Types_ID": 1,
-    "ref_airlines_ID": 2,
-    "airline_code": "PN121",
-    "first_airport_code": "PLN",
-    "final_airport_code": "MNL",
-    "departure_date_time": "2024-12-25T10:00:00",
-    "arraval_date_time": "2024-12-26T13:00:00"
-}
-
-{
-    "username": "admin",
-    "password": "admin"
-}
-
-
-
-
-
-
-
-
 ## Project Title: Airport Flight Schedule Management System
 
 **Description:**  
@@ -59,6 +34,10 @@
 7. Install pyest-cov for see test coverage :
     ```bash
     pip install pytest pytest-cov
+    ```
+7. Install python-dotenv for .env :
+    ```bash
+    pip install python-dotenv
     ```
 
 ## Configuration
@@ -100,12 +79,7 @@ SECRET_KEY=```Nowell_T_Saavedra```
    pytest --cov=functions --cov=app --cov-report=term-missing test/
     ```
 
-
-
-
-
 ## Git Commit Guidelines
-
 ### Conventional Commits
 ```bash
 feat: add user authentication
