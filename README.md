@@ -4,7 +4,7 @@
     This system allows users to view flight schedules, including arrival and departure times, as well as airport codes for airlines. Admin users have additional privileges to manage the flight schedules by creating, updating, and deleting entries.
 
 ## Installation
-1. Install Flask:
+1. Install Flask: 
     ```bash
     pip install flask
     ```
