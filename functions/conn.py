@@ -38,6 +38,7 @@ def db_read(query, param=None):
 
            if query.strip().startswith("DELETE"):
                 return cursor.rowcount
+           
            cursor.close()
            conn.close()
            
@@ -80,3 +81,4 @@ def get_db(query, param=None):
         print(f"Error: {e}")
         return HTTPStatus.INTERNAL_SERVER_ERROR
     
+ 

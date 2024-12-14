@@ -16,6 +16,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
 initialition_jwt(app)
 
+
 @app.route('/api/auth/login', methods=['POST'])
 def login_route():
     return login() 
@@ -28,6 +29,7 @@ def login_route():
 def flight_schedule(flight_no=None):
     try:
         
+
         if flight_no is None:
             query = """
                 SELECT flight_schedule_ID, airline_code, arraval_date_time, 
@@ -85,6 +87,7 @@ def flight_schedule(flight_no=None):
             "error": f"An error appeared: {str(e)}"
         }), HTTPStatus.INTERNAL_SERVER_ERROR
 
+
 @app.route('/api/flight_schedules', methods=['POST'])
 def create_flight_schedule():
    
@@ -110,7 +113,7 @@ def create_flight_schedule():
                 )
         values = (
                 data["ref_Aircraft_Types_ID"],
-                data["ref_airlines_ID"],
+                 data["ref_airlines_ID"],
                  data["airline_code"],
                  data["first_airport_code"],
                  data["final_airport_code"],
@@ -134,8 +137,6 @@ def create_flight_schedule():
 @app.route('/api/flight_schedules/<int:flight_no>', methods=['PUT'])
 def update_flight_schedule(flight_no):
     
-
-
     validation_response = functions.auth.validation()
     if validation_response:
         return validation_response

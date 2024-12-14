@@ -35,15 +35,15 @@ def login():
         fresh=True,
         additional_claims={"role": users[username] ["role"]}, 
             expires_delta=datetime.timedelta(minutes=5))
-    return jsonify(
-        access_token = access_token
-    ), HTTPStatus.OK
+    return jsonify({
+        "message": "Welcome, admin!",
+        "access_token": access_token
+    }), HTTPStatus.OK
 
 
 
 def validation():
     try:
-
         verify_jwt_in_request()
 
         claims = get_jwt()
@@ -63,3 +63,4 @@ def validation():
 
 
 
+ 
