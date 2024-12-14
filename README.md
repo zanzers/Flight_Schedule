@@ -1,3 +1,28 @@
+
+
+
+{
+    "ref_Aircraft_Types_ID": 1,
+    "ref_airlines_ID": 2,
+    "airline_code": "PN121",
+    "first_airport_code": "PLN",
+    "final_airport_code": "MNL",
+    "departure_date_time": "2024-12-25T10:00:00",
+    "arraval_date_time": "2024-12-26T13:00:00"
+}
+
+{
+    "username": "admin",
+    "password": "admin"
+}
+
+
+
+
+
+
+
+
 ## Project Title: Airport Flight Schedule Management System
 
 **Description:**  
@@ -27,14 +52,21 @@
     ```bash
     pip install Flask-JWT-Extended
     ```
-
+6. Install faker for Populate the table :
+    ```bash
+    pip install faker
+    ```
+7. Install pyest-cov for see test coverage :
+    ```bash
+    pip install pytest pytest-cov
+    ```
 
 ## Configuration
+Environment variables needed:
 
-Before running the project, configure the following environment variables:
+DATABASE_URL=```mysql://root:root@localhost/airlines_schedule```
 
-- **DATABASE_URL**  
-  URL for the MySQL database connection.
+SECRET_KEY=```Nowell_T_Saavedra```
 
 
 ---
@@ -53,6 +85,24 @@ Before running the project, configure the following environment variables:
 ---
 
 ## Testing
+ Instructions for running tests:
+
+
+1. **Run the Tests**:
+       To run the tests and generate a code coverage report for my system, use the following command:
+    ```bash
+   pytest --cov=functions --cov=app test/
+    ```
+
+2. **Check the Missing Coverage**:
+       To run the tests and generate a code that coverage and missing line in my system, use the following command:
+    ```bash
+   pytest --cov=functions --cov=app --cov-report=term-missing test/
+    ```
+
+
+
+
 
 ## Git Commit Guidelines
 
@@ -63,3 +113,4 @@ fix: resolve database connection issue
 docs: update API documentation
 test: add user registration tests
 
+    
