@@ -1,7 +1,7 @@
 ## Project Title: Airport Flight Schedule Management System
 
 **Description:**  
-    This system allows users to view flight schedules, including arrival and departure times, as well as airport codes for airlines. Admin users have additional privileges to manage the flight schedules by creating, updating, and deleting entries.
+    This system allows users to view flight schedules, including arrival and departure times, as well as airport codes for airlines. Admin users have additional privileges to manage the flight schedules by creating, updating, and deleting flight schedule.
 
 ## Installation
 1. Install Flask:
